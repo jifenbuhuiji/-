@@ -1,0 +1,70 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include <string>
+#include <deque>
+#include <queue>
+#include <stack>
+#include <climits>
+using namespace std;
+
+int ans = 0;
+vector<int> path;
+pair<int, int> MoveIndex(int n, int x, int y)
+{
+    if(y == n - 2)
+    {
+        auto iter = make_pair(x + 1, 0);
+        return iter;
+    }
+    else{
+        auto iter = make_pair(x, y + 1);
+        return iter;
+    }
+}
+
+void backtrace(vector<vector<int>>& vec, int n, int indexX, int indexY)
+{
+    int len = path.size();
+    ans = max(ans, len);
+    for(int i = indexX; i < n - 1; i ++)
+    {
+        for(int j = indexY; j < n - 1; j ++)
+        {
+            if(vec[i][j] == 0 && vec[i][j + 1] == 0
+                && vec[i + 1][j] == 0 && vec[i + 1][j + 1] == 0)
+            {
+                vec[i][j] = 1;
+                vec[i + 1][j] = 1;
+                vec[i][j + 1] = 1;
+                vec[i + 1][j + 1] = 1;
+                auto iter = MoveIndex(n, i, j);
+                path.push_back(1);
+                backtrace(vec, n, iter.first, iter.second);
+                path.pop_back();
+                vec[i][j] = 0;
+                vec[i + 1][j] = 0;
+                vec[i][j + 1] = 0;
+                vec[i + 1][j + 1] = 0;
+            }
+            cout << i  << " " << j << endl;
+        }
+    }
+}
+
+int main()
+{
+    int n, k;
+    cin >> n >> k;
+    vector<vector<int>> vec(n, vector<int>(n, 0));
+    for(int i = 0; i < k; i++)
+    {
+        int x, y;
+        cin >> x >> y;
+        vec[x][y] = 1;
+    }
+
+    backtrace(vec, n, 0, 0);
+    cout << ans << endl;
+}
