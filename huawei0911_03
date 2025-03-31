@@ -1,0 +1,36 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <map>
+
+using namespace std;
+
+int main(){
+	int n, m;
+	cin >> n >> m;
+	vector<vector<int>> vec(m + 1, vector<int>(3, 0));
+	for(int i = 0; i < m; i++)
+	{
+		cin >> vec[i][0] >> vec[i][1] >> vec[i][2];
+	}
+	vector<int> dp(m, 0);
+	dp[0] = vec[0][2];
+	int ans;
+	for(int i = 1; i < m; i++)
+	{
+		for(int j = 0; j < i; j++)
+		{
+			if(vec[i][0] > vec[j][1])  					//可以用二分优化查找速度
+			{
+				dp[i] = max(dp[i], dp[j] + vec[i][2]);
+			}
+			else{
+				dp[i] = max(dp[i], vec[i][2]);
+			}
+		}
+	}
+	sort(dp.begin(), dp.end());
+	cout << dp[m - 1] << endl;
+}
