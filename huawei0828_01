@@ -1,0 +1,46 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <algorithm>
+#include <map>
+#include <unordered_set>
+#include <stack>
+#include <queue>
+#include <climits>
+
+using namespace std;
+int main()
+{
+    stack<int> vec;
+    map<int, int> my_map;
+    vector<int> ans;
+    int n;
+    while(cin >> n)
+    {
+        if(my_map[n])
+        {
+            while(vec.top() != n)
+            {
+                ans.push_back(vec.top());
+                my_map[vec.top()] = 0;
+                vec.pop();
+            }
+            ans.push_back(vec.top());
+            vec.pop();
+            my_map[n] = 0;
+        }
+        my_map[n] = 1;
+        vec.push(n);
+    }
+    int len = vec.size();
+    for(int i = 0; i < len; i++)
+    {
+        ans.push_back(vec.top());
+        vec.pop();
+    }
+    for(int a : ans)
+    {
+        cout << a << ' ';
+    }
+    cout << endl;
+}
