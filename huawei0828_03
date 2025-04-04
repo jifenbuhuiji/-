@@ -1,0 +1,67 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <algorithm>
+#include <map>
+#include <unordered_set>
+#include <stack>
+#include <queue>
+#include <climits>
+
+using namespace std;
+
+/*
+ * 0828第三题
+ * 用日期去匹配赛程
+ * 通过for循环去更新日期
+ * 赛程在“与日期相匹配”和“超出日期”这两种条件下进行更新
+ * 超出日期是为了防止出现：
+ * [1, 1]  [1, 1]  同时k = 1的情况，会被一直卡在某一个赛程
+ * 在这种情况下也要主动更新
+ */
+
+static bool compare(pair<int, int>& a, pair<int, int>& b)
+{
+    if(a.first < b.first)       return true;
+    else if(a.first > b.first)  return false;
+    else 
+    {
+        if(a.second < b.second)
+            return true;
+        else
+            return false;
+    }
+}
+
+int main()
+{
+    int n, k;
+    cin >> n >> k;
+    vector<pair<int, int>> vec;
+    int start;
+    int end;
+    for(int i = 0; i < n; i++)
+    {
+        cin >> start >> end;
+        vec.push_back(make_pair(start, end));
+    }
+    sort(vec.begin(), vec.end(), compare);
+    int day = vec.back().second;
+    int ans = 0;
+    for(int i = 0; i <= day; i++)
+    {
+        static int index = 0;
+        int num = k;
+        while(i > vec[index].second)
+        {
+            index ++;
+        }
+        while(index < vec.size() && vec[index].first <= i && vec[index].second >= i && num != 0)
+        {
+            ans++;
+            index++;
+            num--;
+        }
+    }
+    cout << ans << endl;
+}
