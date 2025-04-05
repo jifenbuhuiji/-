@@ -1,0 +1,58 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <map>
+#include <algorithm>
+#include <cmath>
+#include <queue>
+
+using namespace std;
+
+static bool compare(pair<int, int>&a, pair<int, int>&b)
+{
+    if(a.second > b.second)        return true;
+    else if(a.second < b.second)   return false;
+    else
+    {
+        return a.first > b.first;
+    }
+}
+
+int main()
+{
+    int n;
+    cin >> n;
+    int num;
+    map<int, int> my_map;
+    for(int i = 0; i < n; i++)
+    {
+        cin >> num;
+        my_map[num]++;
+    }
+    int k;
+    cin >> k;
+    map<int, int> cmp_map;
+    for(int i = 0; i < k; i++)
+    {
+        cin >> num;
+        cmp_map[num]++;
+    }
+    for(auto iter : cmp_map)
+    {
+        int key = iter.first;
+        if(my_map.count(key))
+        {
+            int val1 = my_map[key];
+            int val2 = cmp_map[key];
+            if(val1 > val2)    my_map[key] = my_map[key] - cmp_map[key];
+            else               my_map.erase(key);
+        }
+    }
+    vector<pair<int, int>> vec(my_map.begin(), my_map.end());
+    sort(vec.begin(), vec.end(), compare);
+    for(auto iter : vec)
+    {
+        cout << iter.first << ' ';
+    }
+    cout << endl;
+}
